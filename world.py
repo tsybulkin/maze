@@ -4,7 +4,7 @@
 
 import numpy as np
 
-FOOD_NBR = 15
+FOOD_NBR = 55
 GHOST_INIT_PLACES = [ np.array([0, 0]), np.array([9, 9]) ]
 
 class World():
@@ -30,20 +30,29 @@ class World():
 		print "ghost dirs:", self.ghost_directs
 
 		self.agent = np.array([5, 5])
+		
 		for i in range(FOOD_NBR):
-			self.food.add(np.random.randint(0, 10))
+			food = tuple(np.random.randint(0, 10, size=2))
+			self.food.add(food)
 
 	
 	def take_agents_action(self, action):
 		assert action in [None, 'up', 'down', 'left', 'right']
 		## Agent move
 		self.agent += dir2vec(action)
+		if self.agent_cought():
+			return True, 0
 
+		## Food update
+		if tuple(self.agent)  in self.food:
+			self.food.remove(tuple(self.agent))
+			food = 1
+		else:
+			food = 0
 
 		## Ghosts moves
 		for i in range(len(self.ghosts)):
 			g, d = self.ghosts[i], self.ghost_directs[i]
-			print "gost:", g, "moves:", d
 			
 			legal_actions = self.get_legal_actions(g)
 			legal_actions.remove(None)
@@ -61,9 +70,10 @@ class World():
 			self.ghosts[i] += dir2vec(new_dir) 
 			self.ghost_directs[i] = new_dir
 
-		## Food update
+		if self.agent_cought():
+			return True, food
+		return False, food
 
-		# return result
 
 	def get_legal_actions(self, coords):
 		x, y = coords
@@ -93,6 +103,11 @@ class World():
 		
 		for row in maze:
 			print row
+
+	
+	def agent_cought(self):
+		return any(np.array_equal(self.agent, g) for g in self.ghosts)
+
 
 
 

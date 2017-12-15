@@ -11,14 +11,21 @@ def run(ghost_nbr):
 	
 	wrld = world.World(ghost_nbr)
 	wrld.initialize()
+	score = 0
 	wrld.show()
 
 	for i in range(50):
 		available_actions = wrld.get_legal_actions(wrld.agent)
 		move = np.random.choice(available_actions)
-		wrld.take_agents_action(move)
+		agent_caught, food_eaten = wrld.take_agents_action(move)
 		wrld.show()
+
+		if agent_caught:			
+			break
+		else:
+			score += food_eaten
 		sleep(0.3)
+	print "food_eaten:", score
 
 
 
