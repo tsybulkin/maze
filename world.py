@@ -5,7 +5,7 @@
 import numpy as np
 
 FOOD_NBR = 25
-GHOST_INIT_PLACES = [ np.array([0, 0]), np.array([9, 9]) ]
+GHOST_INIT_PLACES = [ np.array([0, 0]), np.array([9, 9]), np.array([0, 9]), np.array([9, 0]) ]
 
 class World():
 	def __init__(self, ghost_nbr):
@@ -18,7 +18,7 @@ class World():
 
 	
 	def initialize(self):
-		for i in range(9):
+		for i in range(10):
 			self.walls.append(np.random.choice([True, False], p=np.array([0.4, 0.6]), size=10))
 
 		indices = np.random.choice(len(GHOST_INIT_PLACES), size=self.ghost_nbr)
@@ -27,8 +27,7 @@ class World():
 		for g in self.ghosts:
 			directions = self.get_legal_actions(g)
 			self.ghost_directs.append(np.random.choice(directions))
-		print "ghost dirs:", self.ghost_directs
-
+		
 		self.agent = np.array([5, 5])
 		
 		for i in range(FOOD_NBR):
@@ -104,9 +103,10 @@ class World():
 		x,y = self.agent
 		row = maze[y]	
 		maze[y] = row[:1+2*x] + "A" + row[2+2*x:]
-		
+		print "", "_"*21
 		for row in maze:
 			print row
+		print "", "-"*21
 
 	
 	def agent_cought(self):
