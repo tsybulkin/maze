@@ -4,7 +4,7 @@
 
 import numpy as np
 
-FOOD_NBR = 55
+FOOD_NBR = 25
 GHOST_INIT_PLACES = [ np.array([0, 0]), np.array([9, 9]) ]
 
 class World():
@@ -92,6 +92,10 @@ class World():
 		maze = []
 		for row in transposed:
 			maze.append(show_row(row))
+
+		for x,y in self.food:
+			row = maze[y]
+			maze[y] = row[:1+2*x] + "." + row[2+2*x:]
 
 		for x,y in self.ghosts:
 			row = maze[y]

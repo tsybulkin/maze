@@ -4,6 +4,7 @@ from time import sleep
 import world
 import numpy as np
 import sys
+import agent
 
 
 def run(ghost_nbr):
@@ -11,21 +12,25 @@ def run(ghost_nbr):
 	
 	wrld = world.World(ghost_nbr)
 	wrld.initialize()
-	score = 0
 	wrld.show()
+	agnt = agent.GreedyAgent()
 
 	for i in range(50):
 		available_actions = wrld.get_legal_actions(wrld.agent)
-		move = np.random.choice(available_actions)
+		move = agnt.get_action(available_actions=available_actions, 
+								my_coords=wrld.agent, 
+								food=wrld.food,
+								ghosts=wrld.ghosts)
+
 		agent_caught, food_eaten = wrld.take_agents_action(move)
 		wrld.show()
 
 		if agent_caught:			
 			break
 		else:
-			score += food_eaten
+			agnt.food += food_eaten
 		sleep(0.3)
-	print "food_eaten:", score
+	print "food_eaten:", agnt.food
 
 
 
