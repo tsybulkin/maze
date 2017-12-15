@@ -58,7 +58,7 @@ class LearningAgent():
 
 
 	def get_action(self, available_actions, my_coords=None, food=[], ghosts=[]):
-		if np.random.random() < 0.1:
+		if np.random.random() < 0.0:
 			self.last_action = np.random.choice(available_actions)
 			return self.last_action
 
@@ -73,7 +73,8 @@ class LearningAgent():
 		f1 = get_closest_ghost_direction(world.agent, world.ghosts)
 		f2 = get_closest_ghost_distance(world.agent, world.ghosts)
 		
-		reward = self.get_reward(caught, eaten_food, (f1,f2))
+		reward = (self.get_reward(caught, eaten_food, (f1,f2)) + 
+			(9 - np.linalg.norm(world.agent-np.array([5,5])))/10.)
 		state = (f1,f2)
 		old_values = self.qTab.get(self.last_state, {})
 		old_val = old_values.get(self.last_action, 0)
@@ -103,7 +104,7 @@ class LearningAgent():
 	def get_reward(self, caught, eaten_food, state):
 		if caught:
 			return -10
-		return eaten_food
+		return 0
 
 
 
