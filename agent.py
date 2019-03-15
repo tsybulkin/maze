@@ -103,8 +103,8 @@ class LearningAgent():
 
 	def get_reward(self, caught, eaten_food, state):
 		if caught:
-			return -10
-		return 0
+			return -50
+		return 0.1 * eaten_food
 
 
 
