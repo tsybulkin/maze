@@ -19,7 +19,7 @@ class World():
 	
 	def initialize(self):
 		for i in range(10):
-			self.walls.append(np.random.choice([True, False], p=np.array([0.4, 0.6]), size=10))
+			self.walls.append(np.random.choice([True, False], p=np.array([0.1, 0.9]), size=10))
 
 		indices = np.random.choice(len(GHOST_INIT_PLACES), size=self.ghost_nbr)
 		self.ghosts = [ GHOST_INIT_PLACES[ind].copy() for ind in indices]

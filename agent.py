@@ -58,7 +58,7 @@ class LearningAgent():
 
 
 	def get_action(self, available_actions, my_coords=None, food=[], ghosts=[]):
-		if np.random.random() < 0.0:
+		if np.random.random() < 0.:
 			self.last_action = np.random.choice(available_actions)
 			return self.last_action
 
@@ -93,12 +93,13 @@ class LearningAgent():
 	
 	def get_best_action(self, available_actions):
 		values = self.qTab.get(self.last_state, {})
-		best_actions = [ (values[a],a) for a in values.keys() if a in available_actions]
+		best_actions = [ (values.get(a, 0),a) for a in available_actions ]
 		if len(best_actions) == 0:
 			return np.random.choice(available_actions)
 		else:
-			_, a = max(best_actions)
-			return a
+			M = max([a[0] for a in best_actions])
+			best_actions = [b[1] for b in best_actions if b[0]==M]
+			return np.random.choice(best_actions)
 
 
 	def get_reward(self, caught, eaten_food, state):
